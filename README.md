@@ -71,148 +71,88 @@ analysis for data-cleaning and preprocessing purposes.
   `df.columns`              Lists column names in the DataFrame.  
 
 ## Program 
-# 1. Import essential Python libraries
-import pandas as pd
-import numpy as np
+import pandas as pd  
+import numpy as np  
 
-# 2. Load the dataset using Pandas
-df = pd.read_csv('heartdisease.csv')
+df = pd.read_csv('heartdisease.csv')  
+df.head()  
 
-# 3. View dataset structure, shape, columns, data types, and memory usage
-print("Dataset Shape (Rows, Columns):", df.shape)
-print("\nColumn Names:\n", df.columns.tolist())
+print("Dataset Shape (Rows, Columns):", df.shape)  
+print("\nColumn Names:\n", df.columns.tolist())  
 
-print("\n--- Dataset Info ---")
-df.info()
+print("\n--- Dataset Info ---")  
+df.info()  
 
-print("\n--- Data Types of All Columns ---")
-print(df.dtypes)
-print("\nData Type of 'age' column:", df['age'].dtype)
+print("\n--- Data Types of All Columns ---")  
+print(df.dtypes)  
 
-# 4. Check for missing values and duplicates
-print("\n--- Missing Values per Column ---")
-print(df.isnull().sum())
+print("\nData Type of 'age' column:", df['age'].dtype)  
 
-print("\nTotal Duplicate Rows:", df.duplicated().sum())
+print("\n--- Missing Values per Column ---")  
+print(df.isnull().sum())  
 
-# Handling missing values and duplicates
-# Fill missing numeric values with column mean (if any) and drop remaining nulls/duplicates
-df_cleaned = df.fillna(df.mean(numeric_only=True))
-df_cleaned = df_cleaned.dropna()
-df_cleaned = df_cleaned.drop_duplicates()
+print("\nTotal Duplicate Rows:", df.duplicated().sum())  
 
-print("Shape after removing duplicates and nulls:", df_cleaned.shape)
+df_cleaned = df.copy()  
 
-# 5. Perform data summary statistics using describe() and mean()
-print("\n--- Statistical Summary ---")
-print(df_cleaned.describe())
+# Fill missing numeric values with their respective column means  
+df_cleaned = df_cleaned.fillna(df_cleaned.mean(numeric_only=True))  
 
-print("\n--- Mean of Numeric Columns ---")
-print(df_cleaned.mean(numeric_only=True))
+# Remove any remaining rows containing missing values  
+df_cleaned = df_cleaned.dropna()  
 
-# 6. View initial and final records using head() and tail()
-print("\n--- First 5 Records ---")
-print(df_cleaned.head())
+# Remove duplicate rows  
+df_cleaned = df_cleaned.drop_duplicates()  
 
-print("\n--- Last 5 Records ---")
-print(df_cleaned.tail())
+print("Shape after removing duplicates and nulls:", df_cleaned.shape)  
 
-# 7. Sort and group the data based on key attributes
-df_sorted = df_cleaned.sort_values(by='age', ascending=True)
-print("\n--- Top 5 Records Sorted by Age ---")
-print(df_sorted[['age', 'sex', 'cp', 'chol', 'target']].head())
+print("\n--- Statistical Summary ---")  
+display(df_cleaned.describe())  
 
-# Grouping by 'target' (0 = No Heart Disease, 1 = Heart Disease)
-grouped = df_cleaned.groupby('target')
+print("\n--- Mean of Numeric Columns ---")  
+print(df_cleaned.mean(numeric_only=True))  
 
-print("\n--- Groupby Sum ---")
-print(grouped[['age', 'chol']].sum())
+print("\n--- First 5 Records ---")  
+display(df_cleaned.head())  
 
-print("\n--- Groupby Mean ---")
-print(grouped[['age', 'trestbps', 'chol']].mean())
+print("\n--- Last 5 Records ---")  
+display(df_cleaned.tail())  
 
-print("\n--- Groupby Median ---")
-print(grouped[['age', 'trestbps', 'chol']].median())
+df_sorted = df_cleaned.sort_values(by='age', ascending=True)  
 
-print("\n--- Groupby Max ---")
-print(grouped[['age', 'chol']].max())
+print("\n--- Top 5 Records Sorted by Age ---")  
+display(df_sorted[['age', 'sex', 'cp', 'chol', 'target']].head())  
 
-print("\n--- Groupby Min ---")
-print(grouped[['age', 'chol']].min())
+grouped = df_cleaned.groupby('target')  
 
-# 8. Rename columns or modify data where necessary
-df_cleaned = df_cleaned.rename(columns={
-    'cp': 'chest_pain_type',
-    'trestbps': 'resting_bp',
-    'chol': 'cholesterol',
-    'thalach': 'max_heart_rate'
-})
-print("\n--- Updated Column Names ---")
-print(df_cleaned.columns.tolist())
+print("\n--- Groupby Sum ---")  
+display(grouped[['age', 'chol']].sum())  
 
-# 9. Save the cleaned dataset for further analysis
-df_cleaned.to_csv('heartdisease_cleaned.csv', index=False)
-print("\nCleaned dataset successfully saved as 'heartdisease_cleaned.csv'.")
+print("\n--- Groupby Mean ---")  
+display(grouped[['age', 'trestbps', 'chol']].mean())  
 
-# Output
-Dataset Shape (Rows, Columns): (303, 14)
+print("\n--- Groupby Median ---")  
+display(grouped[['age', 'trestbps', 'chol']].median())  
 
-Column Names:
- ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
+print("\n--- Groupby Max ---")  
+display(grouped[['age', 'chol']].max())  
 
---- Dataset Info ---
-<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 303 entries, 0 to 302
-Data columns (total 14 columns):
- #   Column    Non-Null Count  Dtype  
----  ------    --------------  -----  
- 0   age       303 non-null    int64  
- 1   sex       303 non-null    int64  
- 2   cp        303 non-null    int64  
- 3   trestbps  303 non-null    int64  
- 4   chol      303 non-null    int64  
- ...
-dtypes: float64(1), int64(13)
-memory usage: 33.3 KB
+print("\n--- Groupby Min ---")  
+display(grouped[['age', 'chol']].min())  
 
---- Data Types of All Columns ---
-age           int64
-sex           int64
-cp            int64
-trestbps      int64
-chol          int64
-...
-Data Type of 'age' column: int64
+df_cleaned = df_cleaned.rename(columns={  
+    'cp': 'chest_pain_type',  
+    'trestbps': 'resting_bp',  
+    'chol': 'cholesterol',  
+    'thalach': 'max_heart_rate'  
+})  
 
---- Missing Values per Column ---
-age         0
-sex         0
-cp          0
-trestbps    0
-chol        0
-...
-Total Duplicate Rows: 1
-Shape after removing duplicates and nulls: (302, 14)
+print("\n--- Updated Column Names ---")  
+print(df_cleaned.columns.tolist())  
 
---- Statistical Summary ---
-              age         sex          cp    trestbps        chol  ...
-count  302.000000  302.000000  302.000000  302.000000  302.000000  ...
-mean    54.420530    0.682119    0.963576  131.602649  246.500000  ...
-std      9.047970    0.466426    1.032044   17.563394   51.753489  ...
-min     29.000000    0.000000    0.000000   94.000000  126.000000  ...
-50%     55.500000    1.000000    1.000000  130.000000  240.500000  ...
-max     77.000000    1.000000    3.000000  200.000000  564.000000  ...
+df_cleaned.to_csv('heartdisease_cleaned.csv', index=False)  
+print("Cleaned dataset successfully saved as 'heartdisease_cleaned.csv'.")  
 
---- Groupby Mean ---
-              age    trestbps        chol
-target                                   
-0       56.601449  134.398551  251.086957
-1       52.585366  129.250000  242.640244
-
---- Updated Column Names ---
-['age', 'sex', 'chest_pain_type', 'resting_bp', 'cholesterol', 'fbs', 'restecg', 'max_heart_rate', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
-
-Cleaned dataset successfully saved as 'heartdisease_cleaned.csv'.
 ## Result
 The heartdisease.csv dataset was successfully loaded, explored, cleaned, and preprocessed using Python and Pandas in Jupyter Notebook. Missing values and duplicate records were identified and removed, statistical summaries and group-level aggregations were computed, columns were renamed for clarity, and the final preprocessed dataset was exported to heartdisease_cleaned.csv ready for further analysis
 
